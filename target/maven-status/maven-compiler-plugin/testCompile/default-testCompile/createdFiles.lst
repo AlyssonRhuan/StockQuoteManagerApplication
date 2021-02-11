@@ -1,0 +1,4 @@
+com/arcs/stock/resource/StockQuoteResourceTest.class
+com/arcs/stock/StockApplicationTests.class
+com/arcs/stock/resource/StockCacheResourceTest.class
+com/arcs/stock/service/StockManagerServiceTest.class
