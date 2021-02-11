@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3'
 
 services:
   docker-mysql:
@@ -6,32 +6,37 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=bootdb
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_HOST='%'
     ports:
       - 3306:3306
     networks:
-      - stock-quote-manager-network
+      - mysql-compose-network
 
-  stock-manager:
+  app:
     image: lucasvilela/stock-manager
     ports:
       - 8080:8080
     depends_on:
       - docker-mysql
     networks:
-      - stock-quote-manager-network
+      - mysql-compose-network
 
-  stock-quote-manager:
+  my-app:
     build:
       dockerfile: Dockerfile
       context: .
     image: stock-quote-manager:1.0
     ports:
       - 8081:8081
+    environment:
+      - SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/bootdb?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
     depends_on:
       - docker-mysql
+      - app
     networks:
-      - stock-quote-manager-network
-
+      - mysql-compose-network
 networks:
-  stock-quote-manager-network:
+  mysql-compose-network:
     driver: bridge
